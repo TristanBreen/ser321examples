@@ -253,7 +253,7 @@ class WebServer {
           query_pairs = splitQuery(request.replace("github?", ""));
           //String json = fetchURL("https://api.github.com" + query_pairs.get("query"));
           String json = fetchURL("https://api.github.com/users/amehlhase316/repos");
-          String parsedInfo = parseGitHubRepos(json);
+          String parsedInfo = parseGitHub(json);
           System.out.println(json);
 
           builder.append("HTTP/1.1 200 OK\n");
