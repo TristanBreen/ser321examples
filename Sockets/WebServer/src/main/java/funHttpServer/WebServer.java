@@ -264,33 +264,33 @@ class WebServer {
                   throw new IllegalArgumentException("Invalid number of parameters");
               }
       
-              // Calculate the discriminant
-              double discriminant = b * b - 4 * a * c;
+              // Calculate the ans
+              double ans = b * b - 4 * a * c;
       
               // Check if roots are real
-              if (discriminant >= 0) {
-                  double root1 = (-b + Math.sqrt(discriminant)) / (2 * a);
-                  double root2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+              if (ans >= 0) {
+                  double root1 = (-b + Math.sqrt(ans)) / (2 * a);
+                  double root2 = (-b - Math.sqrt(ans)) / (2 * a);
       
                   // Generate response
                   builder.append("HTTP/1.1 200 OK\n");
                   builder.append("Content-Type: text/html; charset=utf-8\n");
                   builder.append("\n");
-                  builder.append("Root 1: " + root1 + "<br>");
+                  builder.append("Root 1: " + root1 + "\n");
                   builder.append("Root 2: " + root2);
               } else {
                   // Generate response for complex roots
                   builder.append("HTTP/1.1 200 OK\n");
                   builder.append("Content-Type: text/html; charset=utf-8\n");
                   builder.append("\n");
-                  builder.append("Roots are complex.");
+                  builder.append("Ansers are complex numbers and I can not represent those");
               }
           } catch (Exception e) {
               // Handle invalid input or other exceptions
               builder.append("HTTP/1.1 400 Bad Request\n");
               builder.append("Content-Type: text/html; charset=utf-8\n");
               builder.append("\n");
-              builder.append("Invalid input. Please provide coefficients 'a', 'b', and 'c' in the URL query parameters.");
+              builder.append("Invalid input.Provide a, b, and c for a*x^2 + b*x + c = 0");
           }
       } else if (request.contains("github?")) {
             Map<String, String> query_pairs = new LinkedHashMap<String, String>();
