@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.LinkedHashMap;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 class WebServer {
@@ -245,15 +247,20 @@ class WebServer {
         } else if (request.contains("time")) 
         {
           try {
-              LocalDateTime currentDateTime = LocalDateTime.now();
-              DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-              String formattedDateTime = currentDateTime.format(formatter);
+              String[] parts = request.split("\\?")[1].split("&");
+              String timeZoneId = "UTC"; // Default time zone is UTC
 
-              // Generate response
-              builder.append("HTTP/1.1 200 OK\n");
-              builder.append("Content-Type: text/html; charset=utf-8\n");
-              builder.append("\n");
-              builder.append("Current Time: " + formattedDateTime);
+              if (parts.length == 1 && parts[0].contains("=")) {
+                  String[] pair = parts[0].split("=");
+                  if (pair[0].equals("timezone")) {
+                      timeZoneId = pair[1];
+                  }
+              }
+
+              ZoneId zoneId = ZoneId.of(timeZoneId);
+              ZonedDateTime currentTime = ZonedDateTime.now(zoneId);
+              DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+              String formattedDateTime = currentTime.format(formatter);
           } catch (Exception e) {
               // Handle any exceptions
               builder.append("HTTP/1.1 500 Internal Server Error\n");
