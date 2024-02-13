@@ -247,46 +247,29 @@ class WebServer {
         } else if (request.contains("time")) 
         {
           try {
-            // list of timezones i found online because i did not want to think of so many lol
-                String[] countries = 
-                {
-                  "UTC", 
-                  "America/New_York", 
-                  "Europe/London", 
-                  "Asia/Tokyo",
-                  "Australia/Sydney",
-                  "Africa/Johannesburg",
-                  "America/Los_Angeles",
-                  "Europe/Paris",
-                  "Asia/Dubai",
-                  "Pacific/Auckland",
-                  "Asia/Shanghai",
-                  "America/Mexico_City",
-                  "Europe/Berlin",
-                  "Asia/Singapore",
-                  "America/Sao_Paulo",
-                  "Africa/Cairo",
-                  "Asia/Kolkata",
-                  "Europe/Moscow",
-                  "America/Chicago",
-                  "Asia/Hong_Kong"
-              };
-      
-              StringBuilder str = new StringBuilder();
-              str.append("HTTP/1.1 200 OK\n");
-              str.append("Content-Type: text/html; charset=utf-8\n");
-              str.append("\n");
-      
-              str.append("Time Zones for Different Countries:\n");
-              for (String country : countries) 
-              {
-                  ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of(country));
-                  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                  String formattedDateTime = currentTime.format(formatter);
-                  str.append("<p>").append(country).append(": ").append(formattedDateTime).append("</p>\n");
-              }
-      
-              builder.append(str.toString());
+            String[] parts = request.split("\\?")[1].split("&");
+            String continent = "UTC"; // Default continent is UTC
+            String city = "UTC"; // Default city is UTC
+
+            if (parts.length == 2 && parts[0].contains("=") && parts[1].contains("=")) 
+            {
+                String[] pair1 = parts[0].split("=");
+                String[] pair2 = parts[1].split("=");
+                continent = pair1[1];
+                city = pair2[1];
+            }
+
+            String timeZoneId = continent + "/" + city;
+            ZoneId zoneId = ZoneId.of(timeZoneId);
+            ZonedDateTime currentTime = ZonedDateTime.now(zoneId);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String formattedDateTime = currentTime.format(formatter);
+
+            // Generate response
+            builder.append("HTTP/1.1 200 OK\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n");
+            builder.append("\n");
+            builder.append("Current Time in " + timeZoneId + ": " + formattedDateTime);
           } catch (Exception e) {
               // Handle any exceptions
               builder.append("HTTP/1.1 500 Internal Server Error\n");
