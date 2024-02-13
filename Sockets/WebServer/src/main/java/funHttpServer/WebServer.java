@@ -200,7 +200,7 @@ class WebServer {
             String[] parts = request.split("\\?")[1].split("&");
     
             int num1, num2;
-            // Check if both numbers are specified as key-value pairs (e.g., num1=4&num2=5)
+          
             if (parts.length == 2 && parts[0].contains("=") && parts[1].contains("=")) {
                 Map<String, String> query_pairs = new LinkedHashMap<>();
                 for (String part : parts) {
@@ -209,19 +209,19 @@ class WebServer {
                 }
                 num1 = Integer.parseInt(query_pairs.get("num1"));
                 num2 = Integer.parseInt(query_pairs.get("num2"));
-            } else if (parts.length == 2) {
-                // If both numbers are provided without keys (e.g., 4&5)
+            } else if (parts.length == 2) 
+            {
                 num1 = Integer.parseInt(parts[0]);
                 num2 = Integer.parseInt(parts[1]);
-            } else if (parts.length == 1) {
-                // If only one number is provided without a key (e.g., 4)
+            } else if (parts.length == 1) 
+            {
                 num1 = Integer.parseInt(parts[0]);
                 num2 = 0;
-            } else {
+            } else 
+            {
                 throw new IllegalArgumentException("Invalid number of parameters");
             }
     
-            // Perform multiplication
             int result = num1 * num2;
     
             // Generate response
@@ -251,8 +251,8 @@ class WebServer {
 
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
           query_pairs = splitQuery(request.replace("github?", ""));
-          //String json = fetchURL("https://api.github.com" + query_pairs.get("query"));
-          String json = fetchURL("https://api.github.com/users/amehlhase316/repos");
+          String json = fetchURL("https://api.github.com" + query_pairs.get("query"));
+          //String json = fetchURL("https://api.github.com/users/amehlhase316/repos");
           String parsedInfo = parseGitHub(json);
           System.out.println(json);
 
