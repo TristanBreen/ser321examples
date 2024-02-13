@@ -202,17 +202,27 @@ class WebServer {
           query_pairs = splitQuery(request.replace("multiply?", ""));
 
           // extract required fields from parameters
-          Integer num1 = Integer.parseInt(query_pairs.get("num1"));
-          Integer num2 = Integer.parseInt(query_pairs.get("num2"));
+          try{
+            Integer num1 = Integer.parseInt(query_pairs.get("num1"));
+            Integer num2 = Integer.parseInt(query_pairs.get("num2"));
 
-          // do math
-          Integer result = num1 * num2;
+            // do math
+            String result = Integer.toString(num1 * num2);
 
-          // Generate response
-          builder.append("HTTP/1.1 200 OK\n");
-          builder.append("Content-Type: text/html; charset=utf-8\n");
-          builder.append("\n");
-          builder.append("Result is: " + result);
+            builder.append("HTTP/1.1 200 OK\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n");
+            builder.append("\n");
+            builder.append("Result is: " + result);
+          }
+          catch(Exception e)
+          {
+            String result = "Error when prosessing response...use a different valued INTEGERS and try again";
+            // Generate response
+            builder.append("HTTP/1.1 400 Bad Request\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n");
+            builder.append("\n");
+            builder.append("Result is: " + result);
+          }
 
           // TODO: Include error handling here with a correct error code and
           // a response that makes sense
@@ -228,13 +238,13 @@ class WebServer {
 
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
           query_pairs = splitQuery(request.replace("github?", ""));
-          String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
+          String json = fetchURL("https://api.github.com/users/amehlhase316/repos" + query_pairs.get("query"));
           System.out.println(json);
 
           builder.append("HTTP/1.1 200 OK\n");
           builder.append("Content-Type: text/html; charset=utf-8\n");
           builder.append("\n");
-          builder.append("Check the todos mentioned in the Java source file");
+          builder.append("Json: "+ json);
           // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response based on what the assignment document asks for
 
