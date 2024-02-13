@@ -257,7 +257,7 @@ class WebServer {
           builder.append("HTTP/1.1 200 OK\n");
           builder.append("Content-Type: text/html; charset=utf-8\n");
           builder.append("\n");
-          builder.append("Json: " + fetchURL("https://api.github.com" + query_pairs.get("query"));
+          builder.append("Json: " + fetchURL("https://api.github.com" + query_pairs.get("query")));
           // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response based on what the assignment document asks for
 
