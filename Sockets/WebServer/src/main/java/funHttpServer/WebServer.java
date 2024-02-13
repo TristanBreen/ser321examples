@@ -200,34 +200,42 @@ class WebServer {
             String[] parts = request.split("\\?")[1].split("&");
     
             int num1, num2;
-            // Check if both numbers are specified in the URL query parameters
-            if (parts.length == 2) {
+            // Check if both numbers are specified as key-value pairs (e.g., num1=4&num2=5)
+            if (parts.length == 2 && parts[0].contains("=") && parts[1].contains("=")) {
+                Map<String, String> query_pairs = new LinkedHashMap<>();
+                for (String part : parts) {
+                    String[] pair = part.split("=");
+                    query_pairs.put(pair[0], pair[1]);
+                }
+                num1 = Integer.parseInt(query_pairs.get("num1"));
+                num2 = Integer.parseInt(query_pairs.get("num2"));
+            } else if (parts.length == 2) {
+                // If both numbers are provided without keys (e.g., 4&5)
                 num1 = Integer.parseInt(parts[0]);
                 num2 = Integer.parseInt(parts[1]);
             } else if (parts.length == 1) {
-                // If only one number is specified, set the other number to 0
+                // If only one number is provided without a key (e.g., 4)
                 num1 = Integer.parseInt(parts[0]);
                 num2 = 0;
             } else {
-                // If no numbers are specified or more than two numbers are specified, throw an exception
                 throw new IllegalArgumentException("Invalid number of parameters");
             }
     
             // Perform multiplication
             int result = num1 * num2;
     
-                // Generate response
-                builder.append("HTTP/1.1 200 OK\n");
-                builder.append("Content-Type: text/html; charset=utf-8\n");
-                builder.append("\n");
-                builder.append("Result is: " + result);
-            } catch (Exception e) {
-                // Handle invalid input or other exceptions
-                builder.append("HTTP/1.1 400 Bad Request\n");
-                builder.append("Content-Type: text/html; charset=utf-8\n");
-                builder.append("\n");
-                builder.append("Invalid input. Please provide one or two numbers in the URL query parameters.");
-            }
+            // Generate response
+            builder.append("HTTP/1.1 200 OK\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n");
+            builder.append("\n");
+            builder.append("Result is: " + result);
+        } catch (Exception e) {
+            // Handle invalid input or other exceptions
+            builder.append("HTTP/1.1 400 Bad Request\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n");
+            builder.append("\n");
+            builder.append("Invalid input. Please provide one or two numbers in the URL query parameters.");
+        }
 
           // TODO: Include error handling here with a correct error code and
           // a response that makes sense
