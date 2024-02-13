@@ -196,33 +196,28 @@ class WebServer {
         } else if (request.contains("multiply?")) {
           // This multiplies two numbers, there is NO error handling, so when
           // wrong data is given this just crashes
-          try{
-          Map<String, String> query_pairs = new LinkedHashMap<String, String>();
-          // extract path parameters
-          query_pairs = splitQuery(request.replace("multiply?", ""));
-
-          // extract required fields from parameters
-          
-          int num1 = Integer.parseInt(query_pairs.getOrDefault("num1", "0"));
-          int num2 = Integer.parseInt(query_pairs.getOrDefault("num2", "0"));
-
-            // do math
-            String result = Integer.toString(num1 * num2);
-
+          try {
+            String[] parts = request.split("\\?")[1].split("&");
+    
+            // Extract numbers from URL query parameters
+            int num1 = Integer.parseInt(parts[0]);
+            int num2 = Integer.parseInt(parts[1]);
+    
+            // Perform multiplication
+            int result = num1 * num2;
+    
+            // Generate response
             builder.append("HTTP/1.1 200 OK\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
             builder.append("Result is: " + result);
-          }
-          catch(Exception e)
-          {
-            String result = "Error when prosessing response...use a different valued INTEGERS and try again";
-            // Generate response
+        } catch (Exception e) {
+            // Handle invalid input or other exceptions
             builder.append("HTTP/1.1 400 Bad Request\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
-            builder.append("Result is: " + result);
-          }
+            builder.append("Invalid input. Please provide two numbers in the URL query parameters.");
+        }
 
           // TODO: Include error handling here with a correct error code and
           // a response that makes sense
