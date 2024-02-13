@@ -250,21 +250,19 @@ class WebServer {
             String[] parts = request.split("\\?")[1].split("&");
             String continent = "UTC"; // Default continent is UTC
             String city = "UTC"; // Default city is UTC
-
-            if (parts.length == 2 && parts[0].contains("=") && parts[1].contains("=")) 
+    
+            if (parts.length == 2) 
             {
-                String[] pair1 = parts[0].split("=");
-                String[] pair2 = parts[1].split("=");
-                continent = pair1[1];
-                city = pair2[1];
+                continent = parts[0];
+                city = parts[1];
             }
-
+    
             String timeZoneId = continent + "/" + city;
             ZoneId zoneId = ZoneId.of(timeZoneId);
             ZonedDateTime currentTime = ZonedDateTime.now(zoneId);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDateTime = currentTime.format(formatter);
-
+    
             // Generate response
             builder.append("HTTP/1.1 200 OK\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
