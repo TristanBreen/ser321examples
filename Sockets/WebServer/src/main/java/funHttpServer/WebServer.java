@@ -257,7 +257,7 @@ class WebServer {
                 builder.append("HTTP/1.1 500 Internal Server Error\n");
                 builder.append("Content-Type: text/html; charset=utf-8\n");
                 builder.append("\n");
-                builder.append("Error fetching data from GitHub API.");
+                builder.append("Could not get github information at that URL...check your spelling and try again");
             }
         } else {
             // if the request is not recognized at all
@@ -401,7 +401,7 @@ class WebServer {
     return parsedInfo.toString();
   }
 
-  public static String getValue(String json, String key) 
+  private static String getValue(String json, String key) 
   {
       String[] parts = json.split(",");
       for (String part : parts) 
@@ -409,7 +409,6 @@ class WebServer {
           if (part.contains(key)) {
               if (key.equals("login") && part.contains("owner")) 
               {
-                  // Extract login from owner object
                   String[] keyValue = part.split(":");
                   return keyValue[keyValue.length - 1].trim().replace("\"", "");
               } else {
