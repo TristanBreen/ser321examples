@@ -263,8 +263,8 @@ class WebServer {
                             city = pair[1];
                         }
                     } else {
-                        continent = pair[0];
-                        city = pair[1];
+                        continent = part;
+                        city = part;
                     }
                 }
             } else {
