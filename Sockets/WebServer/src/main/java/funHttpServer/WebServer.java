@@ -248,7 +248,7 @@ class WebServer {
         {
           try {
             // List of common time zones for various countries
-              String[] countries = {"New_York", "Europe/London", "Asia/Tokyo"};
+              String[] countries = {"America/New_York", "Europe/London", "Asia/Tokyo"};
       
               StringBuilder str = new StringBuilder();
               str.append("HTTP/1.1 200 OK\n");
