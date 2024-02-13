@@ -240,7 +240,59 @@ class WebServer {
           // TODO: Include error handling here with a correct error code and
           // a response that makes sense
 
-        } else if (request.contains("github?")) {
+        } else if (request.contains("quadratic?")) {
+          // This solves the quadratic formula: ax^2 + bx + c = 0
+          try {
+              String[] parts = request.split("\\?")[1].split("&");
+      
+              double a, b, c;
+      
+              if (parts.length == 3 && parts[0].contains("=") && parts[1].contains("=") && parts[2].contains("=")) {
+                  Map<String, String> query_pairs = new LinkedHashMap<>();
+                  for (String part : parts) {
+                      String[] pair = part.split("=");
+                      query_pairs.put(pair[0], pair[1]);
+                  }
+                  a = Double.parseDouble(query_pairs.get("a"));
+                  b = Double.parseDouble(query_pairs.get("b"));
+                  c = Double.parseDouble(query_pairs.get("c"));
+              } else if (parts.length == 3) {
+                  a = Double.parseDouble(parts[0]);
+                  b = Double.parseDouble(parts[1]);
+                  c = Double.parseDouble(parts[2]);
+              } else {
+                  throw new IllegalArgumentException("Invalid number of parameters");
+              }
+      
+              // Calculate the discriminant
+              double discriminant = b * b - 4 * a * c;
+      
+              // Check if roots are real
+              if (discriminant >= 0) {
+                  double root1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+                  double root2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+      
+                  // Generate response
+                  builder.append("HTTP/1.1 200 OK\n");
+                  builder.append("Content-Type: text/html; charset=utf-8\n");
+                  builder.append("\n");
+                  builder.append("Root 1: " + root1 + "<br>");
+                  builder.append("Root 2: " + root2);
+              } else {
+                  // Generate response for complex roots
+                  builder.append("HTTP/1.1 200 OK\n");
+                  builder.append("Content-Type: text/html; charset=utf-8\n");
+                  builder.append("\n");
+                  builder.append("Roots are complex.");
+              }
+          } catch (Exception e) {
+              // Handle invalid input or other exceptions
+              builder.append("HTTP/1.1 400 Bad Request\n");
+              builder.append("Content-Type: text/html; charset=utf-8\n");
+              builder.append("\n");
+              builder.append("Invalid input. Please provide coefficients 'a', 'b', and 'c' in the URL query parameters.");
+          }
+      } else if (request.contains("github?")) {
             Map<String, String> query_pairs = new LinkedHashMap<String, String>();
             query_pairs = splitQuery(request.replace("github?", ""));
             try {
