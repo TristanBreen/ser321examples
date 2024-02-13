@@ -247,20 +247,24 @@ class WebServer {
         } else if (request.contains("time")) 
         {
           try {
-              String[] parts = request.split("\\?")[1].split("&");
-              String timeZoneId = "UTC"; // Default time zone is UTC
-
-              if (parts.length == 1 && parts[0].contains("=")) {
-                  String[] pair = parts[0].split("=");
-                  if (pair[0].equals("timezone")) {
-                      timeZoneId = pair[1];
-                  }
+            // List of common time zones for various countries
+              String[] countries = {"UTC", "America/New_York", "Europe/London", "Asia/Tokyo"};
+      
+              StringBuilder str = new StringBuilder();
+              str.append("HTTP/1.1 200 OK\n");
+              str.append("Content-Type: text/html; charset=utf-8\n");
+              str.append("\n");
+      
+              str.append("<h2>Time Zones for Different Countries:</h2>\n");
+              for (String country : countries) {
+                  ZoneId zoneId = ZoneId.of(country);
+                  ZonedDateTime currentTime = ZonedDateTime.now(zoneId);
+                  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                  String formattedDateTime = currentTime.format(formatter);
+                  str.append("<p>").append(country).append(": ").append(formattedDateTime).append("</p>\n");
               }
-
-              ZoneId zoneId = ZoneId.of(timeZoneId);
-              ZonedDateTime currentTime = ZonedDateTime.now(zoneId);
-              DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-              String formattedDateTime = currentTime.format(formatter);
+      
+              builder.append(str.toString());
           } catch (Exception e) {
               // Handle any exceptions
               builder.append("HTTP/1.1 500 Internal Server Error\n");
