@@ -203,8 +203,8 @@ class WebServer {
 
           // extract required fields from parameters
           
-            Integer num1 = Integer.parseInt(query_pairs.get("num1"));
-            Integer num2 = Integer.parseInt(query_pairs.get("num2"));
+            Integer num1 = Integer.parseInt(query_pairs.get("num1","0"));
+            Integer num2 = Integer.parseInt(query_pairs.get("num2","0"));
 
             // do math
             String result = Integer.toString(num1 * num2);
