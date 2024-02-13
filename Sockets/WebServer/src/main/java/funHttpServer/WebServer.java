@@ -247,14 +247,38 @@ class WebServer {
         } else if (request.contains("time")) 
         {
           try {
-            String[] parts = request.split("\\?")[1].split("&");
             String continent = "UTC"; // Default continent is UTC
             String city = "UTC"; // Default city is UTC
     
-            if (parts.length == 2) 
+            if (request.contains("?")) 
             {
-                continent = parts[0];
-                city = parts[1];
+                String query = request.split("\\?")[1];
+                String[] parts = query.split("&");
+    
+                for (String part : parts) {
+                    String[] pair = part.split("=");
+                    if (pair.length == 2) 
+                    {
+                        if (pair[0].equals("continent")) 
+                        {
+                            continent = pair[1];
+                        } else if (pair[0].equals("city")) 
+                        {
+                            city = pair[1];
+                        }
+                    } else 
+                    {
+                        continent = part;
+                    }
+                }
+            } else 
+            {
+                String[] parts = request.split("\\?")[1].split("&");
+                if (parts.length == 2) 
+                {
+                    continent = parts[0];
+                    city = parts[1];
+                }
             }
     
             String timeZoneId = continent + "/" + city;
