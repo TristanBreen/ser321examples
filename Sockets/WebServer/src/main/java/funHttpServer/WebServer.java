@@ -25,8 +25,6 @@ import java.util.Random;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.nio.charset.Charset;
-import org.json.JSONException;
-
 
 class WebServer {
   public static void main(String args[]) {
@@ -254,16 +252,12 @@ class WebServer {
                 builder.append("Content-Type: text/html; charset=utf-8\n");
                 builder.append("\n");
                 builder.append(parsedInfo);
-            } catch (IOException e) {
+            } catch (IOException e) 
+            {
                 builder.append("HTTP/1.1 500 Internal Server Error\n");
                 builder.append("Content-Type: text/html; charset=utf-8\n");
                 builder.append("\n");
                 builder.append("Error fetching data from GitHub API.");
-            } catch (JSONException e) {
-                builder.append("HTTP/1.1 500 Internal Server Error\n");
-                builder.append("Content-Type: text/html; charset=utf-8\n");
-                builder.append("\n");
-                builder.append("Error parsing JSON data from GitHub API.");
             }
         } else {
             // if the request is not recognized at all
