@@ -253,22 +253,29 @@ class WebServer {
             String queryString = request.contains("?") ? request.split("\\?")[1] : request;
             String[] parts = queryString.split("&");
     
-            if (parts.length == 2 && parts[0].contains("=") && parts[1].contains("=")) {
-                for (String part : parts) {
+            if (parts.length == 2 && parts[0].contains("=") && parts[1].contains("=")) 
+            {
+                for (String part : parts) 
+                {
                     String[] pair = part.split("=");
-                    if (pair[0].equals("continent")) {
+                    if (pair[0].equals("continent")) 
+                    {
                         continent = pair[1];
-                    } else if (pair[0].equals("city")) {
+                    } else if (pair[0].equals("city")) 
+                    {
                         city = pair[1];
                     }
                 }
-            } else if (parts.length == 2) {
+            } else if (parts.length == 2) 
+            {
                 continent = parts[0];
                 city = parts[1];
-            } else if (parts.length == 1) {
+            } else if (parts.length == 1) 
+            {
                 continent = parts[0];
                 city = parts[0];
-            } else {
+            } else 
+            {
                 throw new IllegalArgumentException("Invalid query parameters");
             }
     
