@@ -199,25 +199,35 @@ class WebServer {
           try {
             String[] parts = request.split("\\?")[1].split("&");
     
-            // Extract numbers from URL query parameters
-            int num1 = Integer.parseInt(parts[0]);
-            int num2 = Integer.parseInt(parts[1]);
+            int num1, num2;
+            // Check if both numbers are specified in the URL query parameters
+            if (parts.length == 2) {
+                num1 = Integer.parseInt(parts[0]);
+                num2 = Integer.parseInt(parts[1]);
+            } else if (parts.length == 1) {
+                // If only one number is specified, set the other number to 0
+                num1 = Integer.parseInt(parts[0]);
+                num2 = 0;
+            } else {
+                // If no numbers are specified or more than two numbers are specified, throw an exception
+                throw new IllegalArgumentException("Invalid number of parameters");
+            }
     
             // Perform multiplication
             int result = num1 * num2;
     
-            // Generate response
-            builder.append("HTTP/1.1 200 OK\n");
-            builder.append("Content-Type: text/html; charset=utf-8\n");
-            builder.append("\n");
-            builder.append("Result is: " + result);
-        } catch (Exception e) {
-            // Handle invalid input or other exceptions
-            builder.append("HTTP/1.1 400 Bad Request\n");
-            builder.append("Content-Type: text/html; charset=utf-8\n");
-            builder.append("\n");
-            builder.append("Invalid input. Please provide two numbers in the URL query parameters.");
-        }
+                // Generate response
+                builder.append("HTTP/1.1 200 OK\n");
+                builder.append("Content-Type: text/html; charset=utf-8\n");
+                builder.append("\n");
+                builder.append("Result is: " + result);
+            } catch (Exception e) {
+                // Handle invalid input or other exceptions
+                builder.append("HTTP/1.1 400 Bad Request\n");
+                builder.append("Content-Type: text/html; charset=utf-8\n");
+                builder.append("\n");
+                builder.append("Invalid input. Please provide one or two numbers in the URL query parameters.");
+            }
 
           // TODO: Include error handling here with a correct error code and
           // a response that makes sense
