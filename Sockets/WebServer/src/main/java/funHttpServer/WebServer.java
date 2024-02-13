@@ -25,6 +25,8 @@ import java.util.Random;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.nio.charset.Charset;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 class WebServer {
   public static void main(String args[]) {
@@ -240,6 +242,25 @@ class WebServer {
           // TODO: Include error handling here with a correct error code and
           // a response that makes sense
 
+        } else if (request.contains("time")) 
+        {
+          try {
+              LocalDateTime currentDateTime = LocalDateTime.now();
+              DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+              String formattedDateTime = currentDateTime.format(formatter);
+
+              // Generate response
+              builder.append("HTTP/1.1 200 OK\n");
+              builder.append("Content-Type: text/html; charset=utf-8\n");
+              builder.append("\n");
+              builder.append("Current Time: " + formattedDateTime);
+          } catch (Exception e) {
+              // Handle any exceptions
+              builder.append("HTTP/1.1 500 Internal Server Error\n");
+              builder.append("Content-Type: text/html; charset=utf-8\n");
+              builder.append("\n");
+              builder.append("Error retrieving current time.");
+          }
         } else if (request.contains("quadratic?")) {
           // This solves the quadratic formula: ax^2 + bx + c = 0
           try {
