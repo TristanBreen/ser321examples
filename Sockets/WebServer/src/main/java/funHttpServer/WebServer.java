@@ -248,18 +248,20 @@ class WebServer {
         {
           try {
             // List of common time zones for various countries
-              String[] countries = {"America/New_York", "Europe/London", "Asia/Tokyo"};
+              String[] countries = {"UTC", "America/New_York", "Europe/London", "Asia/Tokyo"};
       
               StringBuilder str = new StringBuilder();
               str.append("HTTP/1.1 200 OK\n");
               str.append("Content-Type: text/html; charset=utf-8\n");
               str.append("\n");
       
-              str.append("<h2>Time Zones for Different Countries:</h2>\n");
+              str.append("Time Zones for Different Countries:\n");
               for (String country : countries) 
               {
                   ZonedDateTime currentTime = ZonedDateTime.now(ZoneId.of(country));
-                  str.append("<p>").append(country).append(": ").append(currentTime).append("</p>\n");
+                  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                  String formattedDateTime = currentTime.format(formatter);
+                  str.append("<p>").append(country).append(": ").append(formattedDateTime).append("</p>\n");
               }
       
               builder.append(str.toString());
