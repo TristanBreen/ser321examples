@@ -251,13 +251,15 @@ class WebServer {
 
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
           query_pairs = splitQuery(request.replace("github?", ""));
-          String json = fetchURL("https://api.github.com" + query_pairs.get("query"));
+          //String json = fetchURL("https://api.github.com" + query_pairs.get("query"));
+          String json = fetchURL("https://api.github.com/users/amehlhase316/repos");
+          String parsedInfo = parseGitHubRepos(json);
           System.out.println(json);
 
           builder.append("HTTP/1.1 200 OK\n");
           builder.append("Content-Type: text/html; charset=utf-8\n");
           builder.append("\n");
-          builder.append("Json: "+ json);
+          builder.append(parsedInfo);
           // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response based on what the assignment document asks for
 
@@ -384,5 +386,43 @@ class WebServer {
       System.out.println("Exception in url request:" + ex.getMessage());
     }
     return sb.toString();
+  }
+
+  public static String parseGitHub(String json) 
+  {
+    StringBuilder parsedInfo = new StringBuilder();
+      json = json.substring(1, json.length() - 1);
+      String[] repos = json.split("\\},\\{"); //json delimiters found on stack
+      for (String repo : repos) 
+      {
+        String fullName = getValue(repo, "full_name");
+        int id = Integer.parseInt(getValue(repo, "id"));
+        String login = getValue(repo, "login");
+
+        parsedInfo.append("Full Name: ").append(fullName).append("\n");
+        parsedInfo.append("ID: ").append(id).append("\n");
+        parsedInfo.append("Login: ").append(login).append("\n\n");
+      }
+    return parsedInfo.toString();
+  }
+
+  public static String getValue(String json, String key) 
+  {
+      String[] parts = json.split(",");
+      for (String part : parts) 
+      {
+          if (part.contains(key)) {
+              if (key.equals("login") && part.contains("owner")) 
+              {
+                  // Extract login from owner object
+                  String[] keyValue = part.split(":");
+                  return keyValue[keyValue.length - 1].trim().replace("\"", "");
+              } else {
+                  String[] keyValue = part.split(":");
+                  return keyValue[1].trim().replace("\"", "");
+              }
+          }
+      }
+      return "";
   }
 }
