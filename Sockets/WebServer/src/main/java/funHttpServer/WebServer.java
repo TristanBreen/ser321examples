@@ -247,8 +247,30 @@ class WebServer {
         } else if (request.contains("time")) 
         {
           try {
-            // List of common time zones for various countries
-              String[] countries = {"UTC", "America/New_York", "Europe/London", "Asia/Tokyo"};
+            // list of timezones i found online because i did not want to think of so many lol
+                String[] countries = 
+                {
+                  "UTC", 
+                  "America/New_York", 
+                  "Europe/London", 
+                  "Asia/Tokyo",
+                  "Australia/Sydney",
+                  "Africa/Johannesburg",
+                  "America/Los_Angeles",
+                  "Europe/Paris",
+                  "Asia/Dubai",
+                  "Pacific/Auckland",
+                  "Asia/Shanghai",
+                  "America/Mexico_City",
+                  "Europe/Berlin",
+                  "Asia/Singapore",
+                  "America/Sao_Paulo",
+                  "Africa/Cairo",
+                  "Asia/Kolkata",
+                  "Europe/Moscow",
+                  "America/Chicago",
+                  "Asia/Hong_Kong"
+              };
       
               StringBuilder str = new StringBuilder();
               str.append("HTTP/1.1 200 OK\n");
